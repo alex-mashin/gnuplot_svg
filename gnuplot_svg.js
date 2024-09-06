@@ -36,7 +36,7 @@ if (window) {
 	});
 }
 
-gnuplot_svg = function( svgElement ) {
+const gnuplot_svg = function( svgElement ) {
 
 	const version = '06 September 2024';
 
@@ -88,18 +88,18 @@ gnuplot_svg = function( svgElement ) {
 	// Get plot boundaries and axis scaling information for mousing from current object script tag
 	// TODO add these to svg xml custom attribute for reading(json format)
 	const parseSettings = text => JSON.parse( '{\n' + text
-		// Remove inline comments
-		.replace( /^\s*\/\/.*\n/g, '' )
-		// Change prefix to "
-		.replace( /gnuplot_svg\./g, '"' )
-		// Change = to " :
-		.replace( / = /g, '" : ' )
-		// Change line endings to comma
-		.replace( /;\n|\n/g, ',' )
-		// Remove last comma
-		.replace( /,+$/, '' )
-	// Parse as json string
-	+ '\n}' );
+			// Remove inline comments
+			.replace( /^\s*\/\/.*\n/g, '' )
+			// Change prefix to "
+			.replace( /gnuplot_svg\./g, '"' )
+			// Change = to " :
+			.replace( / = /g, '" : ' )
+			// Change line endings to comma
+			.replace( /;\n|\n/g, ',' )
+			// Remove last comma
+			.replace( /,+$/, '' )
+		// Parse as json string
+		+ '\n}' );
 
 	// Get keyentry elements:
 	const toggleVisibility = function( keyEntry ) {
@@ -109,18 +109,18 @@ gnuplot_svg = function( svgElement ) {
 
 		// Add keyentry event to toggle visibility
 		keyEntry.addEventListener('click', key.bind(null, keyEntry.getAttribute('id'), null));
-	}
+	};
 
 	// Remove onclick and onbousemove attributes:
-	const removeOnclickOnMouseMove = function ( element ) {
+	const removeOnclickOnMouseMove = function( element ) {
 		if ( element ) {
 			element.removeAttribute('onclick');
 			element.removeAttribute('onmousemove');
 		}
-	}
+	};
 
 	// Add interactive events:
-	const addEvents = function  (  ) {
+	const addEvents = function(  ) {
 		// Get keyentry elements:
 		svgElement.querySelectorAll( 'g[id$="_keyentry"]' ).forEach( toggleVisibility );
 
@@ -315,12 +315,12 @@ gnuplot_svg = function( svgElement ) {
 	const getViewBox = () => svgElement.getAttribute('viewBox').split(' ').map ( str => parseFloat( str ) );
 
 	// Set svg viewbox details
-	const setViewBox = function ( viewBoxValues ) {
+	const setViewBox = function( viewBoxValues ) {
 		svgElement.setAttribute('viewBox', viewBoxValues.join(' '));
 	};
 
 	// Set coordinate label position and text
-	const setCoordinateLabel = function (evt ) {
+	const setCoordinateLabel = function( evt ) {
 		let position = convertDOMToSVG ( { 'x': evt.clientX, 'y': evt.clientY } );
 
 		// Set coordinate label position
@@ -338,14 +338,14 @@ gnuplot_svg = function( svgElement ) {
 	};
 
 	// Convert position DOM to SVG
-	const convertDOMToSVG = function ( position ) {
+	const convertDOMToSVG = function( position ) {
 		point.x = position.x;
 		point.y = position.y;
 		return point.matrixTransform(svgElement.getScreenCTM().inverse());
 	};
 
 	// Convert position SVG to Plot
-	const convertSVGToPlot = function ( position ) {
+	const convertSVGToPlot = function( position ) {
 		let plotcoord = {};
 		let plotx = position.x - settings.plot_xmin;
 		let ploty = position.y - settings.plot_ybot;
@@ -377,7 +377,7 @@ gnuplot_svg = function( svgElement ) {
 	};
 
 	// Parse plot x/y values to label
-	const parseCoordinateLabel = function ( plotcoord ) {
+	const parseCoordinateLabel = function( plotcoord ) {
 		let label = { 'x': 0, 'y': 0 };
 
 		if (settings.plot_timeaxis_x === 'DMS' || settings.plot_timeaxis_y === 'DMS') {
@@ -427,7 +427,7 @@ gnuplot_svg = function( svgElement ) {
 	};
 
 	// Convert position to Polar
-	const convertToPolar = function ( x, y ) {
+	const convertToPolar = function( x, y ) {
 		let polar = {};
 		let phi, r;
 		phi = Math.atan2(y, x);
@@ -453,7 +453,7 @@ gnuplot_svg = function( svgElement ) {
 	};
 
 	// Convert position to DMS
-	const convertToDMS = function (x) {
+	const convertToDMS = function( x ) {
 		let dms = { d: 0, m: 0, s: 0 };
 		let deg = Math.abs(x);
 		dms.d = Math.floor(deg);
@@ -463,7 +463,7 @@ gnuplot_svg = function( svgElement ) {
 	};
 
 	// Set popover text to show
-	const setPopoverText = function (content) {
+	const setPopoverText = function( content ) {
 
 		// Minimum length
 		popoverText.width = popoverText.defaultWidth;
@@ -512,7 +512,7 @@ gnuplot_svg = function( svgElement ) {
 	};
 
 	// Set popover image to show
-	const setPopoverImage = function (content) {
+	const setPopoverImage = function( content ) {
 
 		// Set default image size
 		popoverImage.width = popoverImage.defaultWidth;
@@ -534,7 +534,7 @@ gnuplot_svg = function( svgElement ) {
 	};
 
 	// Show popover text in given position
-	const showPopoverText = function  ( position ) {
+	const showPopoverText = function( position ) {
 		let domRect = svgElement.getBoundingClientRect();
 		domRect = convertDOMToSVG( {'x': domRect.right, 'y': domRect.bottom } );
 
@@ -559,7 +559,6 @@ gnuplot_svg = function( svgElement ) {
 		popoverText.element.setAttribute('visibility', 'visible');
 
 		// Change multiline text position
-		let tspan = popoverText.element.querySelectorAll('tspan');
 		popoverText.element.querySelectorAll('tspan').forEach( tspan => {
 			tspan.setAttribute('x', position.x + 14);
 		} );
@@ -577,7 +576,7 @@ gnuplot_svg = function( svgElement ) {
 	};
 
 	// Show popover image in given position
-	const showPopoverImage = function ( position) {
+	const showPopoverImage = function( position ) {
 		let domRect = svgElement.getBoundingClientRect();
 		domRect = convertDOMToSVG ( {'x': domRect.right, 'y': domRect.bottom });
 
@@ -597,14 +596,14 @@ gnuplot_svg = function( svgElement ) {
 	};
 
 	// Hide all popovers
-	const hidePopover = function () {
+	const hidePopover = function() {
 		popoverContainer.element.setAttribute('visibility', 'hidden');
 		popoverText.element.setAttribute('visibility', 'hidden');
 		popoverImage.element.setAttribute('visibility', 'hidden');
 	};
 
 	// Zoom svg inside viewbox
-	const zoom = function (direction) {
+	const zoom = function( direction ) {
 		let zoomRate = 1.1;
 		let viewBoxValues = getViewBox();
 
@@ -630,7 +629,7 @@ gnuplot_svg = function( svgElement ) {
 	};
 
 	// Pan svg inside viewbox
-	const pan = function (direction) {
+	const pan = function(direction ) {
 		const panRate = 10;
 		let viewBoxValues = getViewBox();
 
@@ -653,7 +652,7 @@ gnuplot_svg = function( svgElement ) {
 	};
 
 	// Toggle key and chart on/off or set manually to wanted
-	const key = function ( id, set, evt) {
+	const key = function( id, set, evt ) {
 		let visibility = null;
 
 		// Chart element
@@ -683,7 +682,7 @@ gnuplot_svg = function( svgElement ) {
 	};
 
 	// Toggle coordinates on/off or set manually to wanted
-	const coordinate = function (set) {
+	const coordinate = function( set ) {
 		if (coordinateText.element) {
 			// Set on/off
 			if (set === true || set === false) {
@@ -698,7 +697,7 @@ gnuplot_svg = function( svgElement ) {
 	};
 
 	// Toggle grid on/off or set manually to wanted
-	const grid = function ( set) {
+	const grid = function( set ) {
 		let grid = svgElement.getElementsByClassName('gridline');
 
 		// Set on/off
@@ -716,7 +715,7 @@ gnuplot_svg = function( svgElement ) {
 	};
 
 	// Show popover text or image
-	const popover = function ( content, set, evt ) {
+	const popover = function( content, set, evt ) {
 
 		// Hide popover
 		if (set === false) {
@@ -806,7 +805,7 @@ gnuplot_svg = function( svgElement ) {
 	svgElement.setAttribute('draggable', false);
 
 	// Add events
-	addEvents ();
+	addEvents();
 
 	// Return functions to outside use
 	return {
