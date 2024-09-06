@@ -125,7 +125,7 @@ const gnuplot_svg = function( svgElement ) {
 		svgElement.querySelectorAll( 'g[id$="_keyentry"]' ).forEach( toggleVisibility );
 
 		// ------- Remove inline events from bounding box
-		svgElement.querySelector( 'rect[onclick^="gnuplot_svg.toggleCoordBox"]' ).forEach( removeOnclickOnMouseMove );
+		removeOnclickOnMouseMove( svgElement.querySelector( 'rect[onclick^="gnuplot_svg.toggleCoordBox"]' ) );
 		// ------- Remove inline events from canvas
 		let canvas = svgElement.getElementById('gnuplot_canvas');
 		if ( canvas ) {
