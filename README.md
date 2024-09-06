@@ -8,4 +8,4 @@ by the address `/js/gnuplot/gnuplot_svg` and call `gnuplot` like this:
   name '$name' $heads dashlength 1.0;" -
 ```
 
-Based on the work by Marko Karjalainen <markokarjalainen@kolumbus.fi> published at `http://gnuplot.sourceforge.net/demo_svg_5.4/gnuplot_svg.js`.
+Based on the work by Marko Karjalainen <markokarjalainen@kolumbus.fi> published at http://gnuplot.sourceforge.net/demo_svg_5.4/gnuplot_svg.js.
