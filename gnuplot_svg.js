@@ -122,14 +122,10 @@ gnuplot_svg = function( svgElement ) {
 	// Add interactive events:
 	const addEvents = function  (  ) {
 		// Get keyentry elements:
-		for ( let keyEntry in svgElement.querySelectorAll('g[id$="_keyentry"]') ) {
-			toggleVisibility( keyEntry );
-		}
+		svgElement.querySelectorAll( 'g[id$="_keyentry"]' ).forEach( toggleVisibility );
 
 		// ------- Remove inline events from bounding box
-		for ( let boundingBox in svgElement.querySelector( 'rect[onclick^="gnuplot_svg.toggleCoordBox"]' ) ) {
-			removeOnclickOnMouseMove( boundingBox );
-		}
+		svgElement.querySelector( 'rect[onclick^="gnuplot_svg.toggleCoordBox"]' ).forEach( removeOnclickOnMouseMove );
 		// ------- Remove inline events from canvas
 		let canvas = svgElement.getElementById('gnuplot_canvas');
 		if ( canvas ) {
@@ -164,7 +160,7 @@ gnuplot_svg = function( svgElement ) {
 			popoverImage.defaultHeight = popoverImage.element.getAttribute('height');
 		}
 
-		for ( let hyperText in hyperTexts ) {
+		hyperTexts.forEach( hyperText => {
 			// Get text from attr ugly way, svg has empty title element
 			let text = hyperText.getAttribute( 'onmousemove' ).slice( 31, -2 );
 
@@ -176,7 +172,7 @@ gnuplot_svg = function( svgElement ) {
 			// Add event
 			hyperText.addEventListener('mousemove', popover.bind(null, text, true));
 			hyperText.addEventListener('mouseout', popover.bind(null, null, false));
-		}
+		} );
 
 		// Toggle coordinates visibility on left click on boundingBox element
 		svgElement.addEventListener('click', function (evt) {
@@ -489,14 +485,14 @@ gnuplot_svg = function( svgElement ) {
 			let lineWidth = 0;
 			let tspanElement;
 
-			for (let l = 0; l < lines.length; l++) {
+			for ( line in lines ) {
 				tspanElement = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
 				// Y relative position
 				if (l > 0) {
 					tspanElement.setAttribute('dy', popoverText.defaultHeight);
 				}
 				// Append text
-				tspanElement.appendChild(document.createTextNode(lines[l]));
+				tspanElement.appendChild(document.createTextNode(line));
 				popoverText.element.appendChild(tspanElement);
 
 				// Max line width
@@ -564,8 +560,8 @@ gnuplot_svg = function( svgElement ) {
 
 		// Change multiline text position
 		let tspan = popoverText.element.querySelectorAll('tspan');
-		for (let i = 0; i < tspan.length; i++) {
-			tspan[i].setAttribute('x', position.x + 14);
+		for ( tspan in popoverText.element.querySelectorAll('tspan') ) {
+			tspan.setAttribute('x', position.x + 14);
 		}
 
 		// Font properties
@@ -713,9 +709,9 @@ gnuplot_svg = function( svgElement ) {
 			gridEnabled = grid[0].getAttribute('visibility') === 'hidden';
 		}
 
-		for ( let line in grid ) {
+		grid.forEach( line => {
 			line.setAttribute('visibility', gridEnabled ? 'visible' : 'hidden');
-		}
+		} );
 	};
 
 	// Show popover text or image
@@ -791,13 +787,13 @@ gnuplot_svg = function( svgElement ) {
 	};
 
 	// Parse plot settings
-	for ( let script in svgElement.querySelectorAll( 'script' ) ) {
-		let scriptText = script.innerHTML.replaceAll( '<!\[CDATA\[', '' ).replaceAll( '\]\]>', '' );
+	svgElement.querySelectorAll( 'script' ).forEach( script => {
+		let scriptText = script.innerHTML;
 		if ( scriptText.includes( 'gnuplot_svg' ) ) {
+			scriptText = scriptText.replaceAll( '<!\[CDATA\[', '' ).replaceAll( '\]\]>', '' );
 			settings = parseSettings( scriptText );
-			break;
 		}
-	}
+	} );
 
 	// viewBox initial position and size
 	viewBoxResetValue = getViewBox();
