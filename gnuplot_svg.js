@@ -560,9 +560,10 @@ gnuplot_svg = function( svgElement ) {
 
 		// Change multiline text position
 		let tspan = popoverText.element.querySelectorAll('tspan');
-		for ( tspan in popoverText.element.querySelectorAll('tspan') ) {
+		popoverText.element.querySelectorAll('tspan').forEach( tspan => {
 			tspan.setAttribute('x', position.x + 14);
-		}
+		} );
+
 
 		// Font properties
 		if (settings.hypertext_fontFamily != null)
