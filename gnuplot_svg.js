@@ -792,12 +792,10 @@ gnuplot_svg = function( svgElement ) {
 
 	// Parse plot settings
 	for ( let script in svgElement.querySelectorAll( 'script' ) ) {
-		if ( script.firstChild ) {
-			let scriptText = script.firstChild.nodeValue;
-			if ( nodeValue.includes( 'gnuplot_svg' ) ) {
-				settings = parseSettings( scriptText );
-				break;
-			}
+		let scriptText = script.innerHTML.replaceAll( '<!\[CDATA\[', '' ).replaceAll( '\]\]>', '' );
+		if ( scriptText.includes( 'gnuplot_svg' ) ) {
+			settings = parseSettings( scriptText );
+			break;
 		}
 	}
 
